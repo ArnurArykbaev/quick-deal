@@ -93,7 +93,7 @@
           ></b-form-input>
         </b-form-group>
 
-        <YandexCard :settings="settings" />
+        <YandexCard @setLocation="setLocation" />
 
         <b-form-group
           class="mt-4"
@@ -142,7 +142,7 @@ export default defineComponent({
         age: 18,
         variablesOfLastnames: [],
         manager: "",
-        location: "",
+        location: [] as string[] | number[],
       },
     });
 
@@ -164,6 +164,10 @@ export default defineComponent({
         };
       });
     });
+
+    const setLocation = (location: string[] | number[]) => {
+      state.form.location = location;
+    };
 
     const onSubmit = () => {
       const newEmployee: Employee = {
@@ -208,6 +212,7 @@ export default defineComponent({
       getVariants,
       employees,
       formattedEmployees,
+      setLocation,
     };
   },
 });

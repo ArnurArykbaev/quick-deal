@@ -6,9 +6,11 @@ import "./plugins/bootstrap";
 import "./styles/main.css";
 import { BootstrapVue } from "bootstrap-vue";
 import vueDebounce from "vue-debounce";
+import ymapPlugin from "vue-yandex-maps";
 
 Vue.config.productionTip = false;
-Vue.use(BootstrapVue).use(vueDebounce);
+
+Vue.use(ymapPlugin).use(BootstrapVue).use(vueDebounce);
 
 new Vue({
   router,

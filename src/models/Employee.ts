@@ -6,6 +6,6 @@ export type Employee = {
   lastname: string;
   surname: string;
   age: number;
-  location: string; // Corrected property name to 'location'
+  location: string[] | number[];
   manager: string | Employee;
 };
