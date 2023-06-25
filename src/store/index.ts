@@ -1,12 +1,19 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
+import employees from "./modules/employees";
 
 Vue.use(Vuex);
-
-export default new Vuex.Store({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-  modules: {},
+const store = new Vuex.Store({
+  plugins: [
+    createPersistedState({
+      storage: localStorage,
+    }),
+  ],
+  modules: {
+    employees,
+  },
 });
+
+export default store;
+export const useStore = () => store;
