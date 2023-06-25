@@ -2,27 +2,50 @@
   <div class="employee-form">
     <b-button v-b-modal.modal-1 variant="light">Add new employee</b-button>
 
-    <b-modal id="modal-1">
+    <b-modal id="modal-1" hide-footer>
       <template #modal-title> Form to add new employee </template>
 
-      <b-form>
+      <b-form @submit="onSubmit" @reset="onReset">
         <p class="my-4">Fill in field to add a new employee!</p>
 
         <b-form-group
           class="mt-4"
           id="input-group-1"
-          label="Employee name:"
+          label="Employee lastname:"
           label-for="input-1"
         >
           <b-form-input
-            list="my-list-id"
+            list="my-list-lastname"
+            v-model="state.form.lastname"
+            @input="getVariants"
+            placeholder="Enter an employee lastname"
+            required
+          ></b-form-input>
+
+          <datalist id="my-list-lastname">
+            <option
+              v-for="(size, index) in state.form.variablesOfLastnames"
+              :key="index + Math.random()"
+            >
+              {{ size }}
+            </option>
+          </datalist>
+        </b-form-group>
+        <b-form-group
+          class="mt-4"
+          id="input-group-2"
+          label="Employee name:"
+          label-for="input-2"
+        >
+          <b-form-input
+            list="my-list-name"
             v-model="state.form.name"
             @input="getVariants"
             placeholder="Enter an employee name"
             required
           ></b-form-input>
 
-          <datalist id="my-list-id">
+          <datalist id="my-list-name">
             <option
               v-for="(size, index) in state.form.variablesOfLastnames"
               :key="index + Math.random()"
@@ -34,28 +57,63 @@
 
         <b-form-group
           class="mt-4"
-          id="input-group-2"
-          label="Employee age:"
-          label-for="input-2"
+          id="input-group-3"
+          label="Employee surname:"
+          label-for="input-3"
         >
           <b-form-input
+            list="my-list-surname"
+            v-model="state.form.surname"
+            @input="getVariants"
+            placeholder="Enter an employee surname"
+            required
+          ></b-form-input>
+
+          <datalist id="my-list-surname">
+            <option
+              v-for="(size, index) in state.form.variablesOfLastnames"
+              :key="index + Math.random()"
+            >
+              {{ size }}
+            </option>
+          </datalist>
+        </b-form-group>
+
+        <b-form-group
+          class="mt-4"
+          id="input-group-4"
+          label="Employee age:"
+          label-for="input-4"
+        >
+          <b-form-input
+            v-model="state.form.age"
             type="number"
             placeholder="Enter an employee age"
             required
           ></b-form-input>
         </b-form-group>
 
+        <YandexCard :settings="settings" />
+
         <b-form-group
           class="mt-4"
-          id="input-group-3"
+          id="input-group-5"
           label="Employee's manager:"
-          label-for="input-3"
+          label-for="input-5"
         >
           <b-form-select
-            v-model="state.selected"
-            :options="state.form.options"
+            v-model="state.form.manager"
+            :options="formattedEmployees"
+            text-field="text"
+            text-value="value"
           ></b-form-select>
         </b-form-group>
+        <div class="modal-buttons w-100">
+          <b-button class="mx-3" type="reset" variant="danger">Reset</b-button>
+          <b-button class="mx-3" type="submit" variant="primary"
+            >Submit</b-button
+          >
+        </div>
       </b-form>
     </b-modal>
   </div>
@@ -63,47 +121,68 @@
 
 <script lang="ts">
 import axios from "@/plugins/axios";
-import { defineComponent, reactive, ref } from "vue";
+import { computed, defineComponent, reactive } from "vue";
 import { Suggestion } from "@/models/Suggestion";
+import { useStore } from "@/store";
+import YandexCard from "@/components/YandexCard.vue";
+
+import { Employee } from "@/models/Employee";
 
 export default defineComponent({
   name: "EmployeeForm",
-  components: {},
-  data() {
-    return {
-      locations: {
-        language: "ru",
-        locations: [
-          {
-            country: "*",
-          },
-        ],
-      },
-    };
-  },
+  components: { YandexCard },
   setup() {
+    const store = useStore();
     const state = reactive({
-      selected: null,
       form: {
+        id: "",
         name: "",
+        lastname: "",
+        surname: "",
+        age: 18,
         variablesOfLastnames: [],
-        options: [
-          { value: null, text: "Please select an option" },
-          { value: "a", text: "This is First option" },
-          { value: "b", text: "Selected Option" },
-          { value: { C: "3PO" }, text: "This is an option with object value" },
-          { value: "d", text: "This one is disabled", disabled: true },
-        ],
+        manager: "",
+        location: "",
       },
     });
 
+    const settings = {
+      apiKey: "",
+      lang: "ru_RU",
+      coordorder: "latlong",
+      enterprise: false,
+      version: "2.1",
+    };
+
+    const employees = computed(() => store.getters.employees);
+
+    const formattedEmployees = computed(() => {
+      return employees.value.map((employee: Employee) => {
+        return {
+          text: `${employee?.name} ${employee?.lastname}`,
+          value: employee?.id,
+        };
+      });
+    });
+
     const onSubmit = () => {
-      console.log("OK");
+      const newEmployee: Employee = {
+        id: `id-${store.getters.employees.length}${(
+          Math.random() * 100000
+        ).toFixed(0)}`,
+        name: state.form.name,
+        lastname: state.form.lastname,
+        surname: state.form.surname,
+        age: state.form.age,
+        location: state.form.location,
+        manager: state.form.manager as string | Employee,
+      };
+
+      store.dispatch("setEmployee", newEmployee);
     };
     const onReset = () => {
-      console.log("OK");
+      console.log("Reset");
     };
-    const query = ref("");
 
     const getVariants = async (value: string) => {
       const endpoint = "suggestions/api/4_1/rs/suggest/fio";
@@ -122,15 +201,23 @@ export default defineComponent({
     };
 
     return {
-      token: "5b9b34781d705471a6dedf3d4a4b1acd1d6dee48",
-      query,
       state,
+      settings,
       onSubmit,
       onReset,
       getVariants,
+      employees,
+      formattedEmployees,
     };
   },
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.modal-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 4rem;
+}
+</style>
