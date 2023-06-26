@@ -1,24 +1,29 @@
 <template>
   <div class="yandex-card">
-    <yandex-map
-      :coords="[56.838011, 60.597474]"
-      :settings="settings"
-      @click="onClick"
-    >
+    <yandex-map :coords="state.coords" :settings="settings" @click="onClick">
       <ymap-marker marker-id="marker-id" :coords="state.coords"></ymap-marker>
     </yandex-map>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, onMounted, reactive } from "vue";
 
 export default defineComponent({
   name: "YandexCard",
-  props: {},
+  props: {
+    location: {
+      type: Array,
+      default: () => [56.838011, 60.597474],
+    },
+  },
   setup(props, { emit }) {
     const state = reactive({
-      coords: [54, 39],
+      coords: [] as any[],
+    });
+
+    onMounted(() => {
+      state.coords = props.location;
     });
 
     const settings = {
@@ -44,6 +49,6 @@ export default defineComponent({
   height: 100%;
 }
 .ymap-container {
-  height: 500px;
+  height: 400px;
 }
 </style>

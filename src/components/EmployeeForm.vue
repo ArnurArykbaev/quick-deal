@@ -93,7 +93,10 @@
           ></b-form-input>
         </b-form-group>
 
-        <YandexCard @setLocation="setLocation" />
+        <YandexCard
+          :location="state.form.location"
+          @setLocation="setLocation"
+        />
 
         <b-form-group
           class="mt-4"
@@ -142,7 +145,7 @@ export default defineComponent({
         age: 18,
         variablesOfLastnames: [],
         manager: "",
-        location: [] as string[] | number[],
+        location: [56.838011, 60.597474] as string[] | number[],
       },
     });
 
@@ -166,7 +169,9 @@ export default defineComponent({
     });
 
     const setLocation = (location: string[] | number[]) => {
+      console.log("LOC", location);
       state.form.location = location;
+      console.log("LOCCCCC", state.form.location);
     };
 
     const onSubmit = () => {
