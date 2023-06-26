@@ -9,7 +9,54 @@ interface EmployeesStoreState {
 
 const employeesStore = {
   state: {
-    employees: [] as EmployeesList,
+    employees: [
+      {
+        id: "id-076573",
+        name: "Андрей",
+        lastname: "Емельянов",
+        surname: "Константинович",
+        age: 28,
+        location: [56.83814985984784, 60.59831422291686],
+        manager: "",
+      },
+      {
+        id: "id-195554",
+        name: "Зинаида",
+        lastname: "Кузнецова",
+        surname: "Викторовна",
+        age: 62,
+        location: [56.83839390277052, 60.54847468914913],
+        manager: "id-076573",
+        _showDetails: false,
+      },
+      {
+        id: "id-269884",
+        name: "Петр",
+        lastname: "Шкляев",
+        surname: "Константинович",
+        age: 46,
+        location: [56.83839390275087, 60.85847468916845],
+        manager: "id-195554",
+      },
+      {
+        id: "id-33633",
+        name: "Ксения",
+        lastname: "Ефимова",
+        surname: "Григорьевна",
+        age: 23,
+        location: [56.83843506649126, 60.59649568521657],
+        manager: "id-269884",
+      },
+      {
+        age: "28",
+        id: "id-426797",
+        lastname: "Ушакова",
+        location: [56.82658927159686, 60.603944230824524],
+        manager: "id-33633",
+        name: "Кристина",
+        surname: "Ульяновна",
+      },
+    ] as EmployeesList,
   },
   getters: {
     employees: ({ employees }: EmployeesStoreState) => employees,
