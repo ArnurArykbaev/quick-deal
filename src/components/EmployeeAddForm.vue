@@ -1,9 +1,9 @@
 <template>
   <div class="employee-form">
-    <b-button v-b-modal.modal-1 variant="light">Add new employee</b-button>
+    <b-button v-b-modal.modal-1 variant="light">Add a new employee</b-button>
 
     <b-modal id="modal-1" hide-footer>
-      <template #modal-title> Form to add new employee </template>
+      <template #modal-title> Form to add a new employee </template>
       <ValidationObserver v-slot="{ invalid }">
         <b-form @submit="onSubmit" @reset="onReset">
           <b-form-group
