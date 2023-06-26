@@ -10,6 +10,9 @@
       :fields="fields"
       :table-variant="'dark'"
       striped
+      label-sort-asc=""
+      label-sort-desc=""
+      label-sort-clear=""
       :sort-by.sync="state.sortBy"
       :sort-desc.sync="state.sortDesc"
       sort-compare-locale="ru"
@@ -204,9 +207,20 @@ export default defineComponent({
     const modalCount = (index: number) => Math.random() + index;
 
     const sortCompare = (aRow: any, bRow: any, key: any) => {
-      console.log("COMP", aRow, bRow, key);
       if (key === "employee") {
-        console.log("HERE");
+        const a = `${aRow?.lastname} ${aRow.name}`;
+        const b = `${bRow?.lastname} ${bRow.name}`;
+        return a < b ? -1 : a > b ? 1 : 0;
+      }
+
+      if (key === "manager") {
+        const a = `${getManager(aRow.manager)?.lastname} ${
+          getManager(aRow.manager)?.name
+        }`;
+        const b = `${getManager(bRow.manager)?.lastname} ${
+          getManager(bRow.manager)?.name
+        }`;
+        return a < b ? -1 : a > b ? 1 : 0;
       }
     };
 
