@@ -1,10 +1,5 @@
 <template>
   <div class="mt-5">
-    <div>
-      Sorting By: <b>{{ state.sortBy }}</b
-      >, Sort Direction:
-      <b>{{ state.sortDesc ? "Descending" : "Ascending" }}</b>
-    </div>
     <b-table
       :items="employees"
       :fields="fields"

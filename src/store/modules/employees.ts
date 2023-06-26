@@ -1,7 +1,7 @@
 import mutations from "./mutations";
 import { EmployeesList, Employee } from "@/models/Employee";
 
-const { ADD_EMPLOYEE } = mutations;
+const { ADD_EMPLOYEE, DELETE_EMPLOYEE } = mutations;
 
 interface EmployeesStoreState {
   employees: EmployeesList;
@@ -67,10 +67,19 @@ const employeesStore = {
 
       console.log("START", state.employees);
     },
+    [DELETE_EMPLOYEE](state: EmployeesStoreState, employeeToDelete: string) {
+      state.employees = state.employees.filter(
+        (employee: Employee) => employee.id !== employeeToDelete
+      );
+      console.log("DELETE", state.employees);
+    },
   },
   actions: {
     setEmployee({ commit }: { commit: any }, newEmployee: Employee) {
       commit(ADD_EMPLOYEE, newEmployee);
+    },
+    deleteEmployee({ commit }: { commit: any }, employeeToDelete: string) {
+      commit(DELETE_EMPLOYEE, employeeToDelete);
     },
   },
 };

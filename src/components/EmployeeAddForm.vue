@@ -170,7 +170,7 @@ import { required } from "vee-validate/dist/rules";
 import "@/validation/formEmployeeValidation";
 
 export default defineComponent({
-  name: "EmployeeForm",
+  name: "EmployeeAddForm",
   components: { YandexCard, ValidationProvider, ValidationObserver },
   setup() {
     const store = useStore();
