@@ -1,4 +1,5 @@
 # quick-deal
+https://arnurarykbaev.github.io/quick-deal/
 
 ## Project setup
 ```
