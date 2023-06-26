@@ -12,6 +12,7 @@
     "bootstrap": "^5.3.0",
     "bootstrap-vue": "^2.23.1",
     "core-js": "^3.8.3",
+    "vee-validate": "^3.4.15",
     "vue": "^2.7.14",
     "vue-dadata": "^1.4.12",
     "vue-debounce": "^4.0.0",

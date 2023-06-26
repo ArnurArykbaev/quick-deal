@@ -4,120 +4,153 @@
 
     <b-modal id="modal-1" hide-footer>
       <template #modal-title> Form to add new employee </template>
-
-      <b-form @submit="onSubmit" @reset="onReset">
-        <p class="my-4">Fill in field to add a new employee!</p>
-
-        <b-form-group
-          class="mt-4"
-          id="input-group-1"
-          label="Employee lastname:"
-          label-for="input-1"
-        >
-          <b-form-input
-            list="my-list-lastname"
-            v-model="state.form.lastname"
-            @input="getVariants"
-            placeholder="Enter an employee lastname"
-            required
-          ></b-form-input>
-
-          <datalist id="my-list-lastname">
-            <option
-              v-for="(size, index) in state.form.variablesOfLastnames"
-              :key="index + Math.random()"
-            >
-              {{ size }}
-            </option>
-          </datalist>
-        </b-form-group>
-        <b-form-group
-          class="mt-4"
-          id="input-group-2"
-          label="Employee name:"
-          label-for="input-2"
-        >
-          <b-form-input
-            list="my-list-name"
-            v-model="state.form.name"
-            @input="getVariants"
-            placeholder="Enter an employee name"
-            required
-          ></b-form-input>
-
-          <datalist id="my-list-name">
-            <option
-              v-for="(size, index) in state.form.variablesOfLastnames"
-              :key="index + Math.random()"
-            >
-              {{ size }}
-            </option>
-          </datalist>
-        </b-form-group>
-
-        <b-form-group
-          class="mt-4"
-          id="input-group-3"
-          label="Employee surname:"
-          label-for="input-3"
-        >
-          <b-form-input
-            list="my-list-surname"
-            v-model="state.form.surname"
-            @input="getVariants"
-            placeholder="Enter an employee surname"
-            required
-          ></b-form-input>
-
-          <datalist id="my-list-surname">
-            <option
-              v-for="(size, index) in state.form.variablesOfLastnames"
-              :key="index + Math.random()"
-            >
-              {{ size }}
-            </option>
-          </datalist>
-        </b-form-group>
-
-        <b-form-group
-          class="mt-4"
-          id="input-group-4"
-          label="Employee age:"
-          label-for="input-4"
-        >
-          <b-form-input
-            v-model="state.form.age"
-            type="number"
-            placeholder="Enter an employee age"
-            required
-          ></b-form-input>
-        </b-form-group>
-
-        <YandexCard
-          :location="state.form.location"
-          @setLocation="setLocation"
-        />
-
-        <b-form-group
-          class="mt-4"
-          id="input-group-5"
-          label="Employee's manager:"
-          label-for="input-5"
-        >
-          <b-form-select
-            v-model="state.form.manager"
-            :options="formattedEmployees"
-            text-field="text"
-            text-value="value"
-          ></b-form-select>
-        </b-form-group>
-        <div class="modal-buttons w-100">
-          <b-button class="mx-3" type="reset" variant="danger">Reset</b-button>
-          <b-button class="mx-3" type="submit" variant="primary"
-            >Submit</b-button
+      <ValidationObserver v-slot="{ invalid }">
+        <b-form @submit="onSubmit" @reset="onReset">
+          <b-form-group
+            class="mt-4"
+            id="input-group-1"
+            label="Employee lastname:"
+            label-for="input-1"
           >
-        </div>
-      </b-form>
+            <ValidationProvider
+              name="lastname"
+              rules="required"
+              v-slot="{ errors }"
+            >
+              <b-form-input
+                list="my-list-lastname"
+                v-model="state.form.lastname"
+                @input="getVariants"
+                placeholder="Enter an employee lastname"
+                required
+              ></b-form-input>
+              <span class="error">{{ errors[0] }}</span>
+            </ValidationProvider>
+
+            <datalist id="my-list-lastname">
+              <option
+                v-for="(size, index) in state.form.variablesOfLastnames"
+                :key="index + Math.random()"
+              >
+                {{ size }}
+              </option>
+            </datalist>
+          </b-form-group>
+          <b-form-group
+            class="mt-4"
+            id="input-group-2"
+            label="Employee name:"
+            label-for="input-2"
+          >
+            <ValidationProvider
+              name="name"
+              rules="required"
+              v-slot="{ errors }"
+            >
+              <b-form-input
+                list="my-list-name"
+                v-model="state.form.name"
+                @input="getVariants"
+                placeholder="Enter an employee name"
+                required
+              ></b-form-input>
+              <span class="error">{{ errors[0] }}</span>
+            </ValidationProvider>
+
+            <datalist id="my-list-name">
+              <option
+                v-for="(size, index) in state.form.variablesOfLastnames"
+                :key="index + Math.random()"
+              >
+                {{ size }}
+              </option>
+            </datalist>
+          </b-form-group>
+
+          <b-form-group
+            class="mt-4"
+            id="input-group-3"
+            label="Employee surname:"
+            label-for="input-3"
+          >
+            <ValidationProvider
+              name="surname"
+              rules="required"
+              v-slot="{ errors }"
+            >
+              <b-form-input
+                list="my-list-surname"
+                v-model="state.form.surname"
+                @input="getVariants"
+                placeholder="Enter an employee surname"
+                required
+              ></b-form-input>
+              <span class="error">{{ errors[0] }}</span>
+            </ValidationProvider>
+
+            <datalist id="my-list-surname">
+              <option
+                v-for="(size, index) in state.form.variablesOfLastnames"
+                :key="index + Math.random()"
+              >
+                {{ size }}
+              </option>
+            </datalist>
+          </b-form-group>
+
+          <b-form-group
+            class="mt-4"
+            id="input-group-4"
+            label="Employee age:"
+            label-for="input-4"
+          >
+            <ValidationProvider
+              rules="required|minAge|maxAge|odd"
+              v-slot="{ errors }"
+            >
+              <b-form-input
+                v-model="state.form.age"
+                type="number"
+                placeholder="Enter an employee age"
+                required
+              ></b-form-input>
+              <span class="error">{{ errors[0] }}</span>
+            </ValidationProvider>
+          </b-form-group>
+
+          <YandexCard
+            class="mt-4"
+            :location="state.form.location"
+            @setLocation="setLocation"
+          />
+
+          <b-form-group
+            class="mt-4"
+            id="input-group-5"
+            label="Employee's manager:"
+            label-for="input-5"
+          >
+            <b-form-select
+              v-model="state.form.manager"
+              :options="formattedEmployees"
+              text-field="text"
+              text-value="value"
+            ></b-form-select>
+          </b-form-group>
+          <div class="modal-buttons w-100">
+            <b-button class="mx-3" type="reset" variant="danger"
+              >Reset</b-button
+            >
+            <b-button
+              class="mx-3"
+              type="submit"
+              variant="primary"
+              :disabled="invalid"
+              >Submit</b-button
+            >
+          </div>
+        </b-form>
+      </ValidationObserver>
     </b-modal>
   </div>
 </template>
@@ -130,13 +163,19 @@ import { useStore } from "@/store";
 import YandexCard from "@/components/YandexCard.vue";
 
 import { Employee } from "@/models/Employee";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
+import { extend } from "vee-validate";
+import { required } from "vee-validate/dist/rules";
+
+import "@/validation/formEmployeeValidation";
 
 export default defineComponent({
   name: "EmployeeForm",
-  components: { YandexCard },
+  components: { YandexCard, ValidationProvider, ValidationObserver },
   setup() {
     const store = useStore();
     const state = reactive({
+      invalid: true,
       form: {
         id: "",
         name: "",
@@ -229,5 +268,9 @@ export default defineComponent({
   flex-direction: row;
   justify-content: center;
   margin-top: 4rem;
+}
+
+.error {
+  color: #a92a2a;
 }
 </style>

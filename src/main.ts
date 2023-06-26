@@ -7,8 +7,11 @@ import "./styles/main.css";
 import { BootstrapVue } from "bootstrap-vue";
 import vueDebounce from "vue-debounce";
 import ymapPlugin from "vue-yandex-maps";
+import { ValidationProvider, extend } from "vee-validate";
 
 Vue.config.productionTip = false;
+
+Vue.component("ValidationProvider", ValidationProvider);
 
 Vue.use(ymapPlugin).use(BootstrapVue).use(vueDebounce);
 
